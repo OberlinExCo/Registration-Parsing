@@ -2,7 +2,6 @@ import re
 import csv
 import sys
 
-
 def process_line(x):
     return ",".join(x.split()) #removes all spaces and replaces with single comma
 
