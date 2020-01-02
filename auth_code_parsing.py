@@ -2,6 +2,7 @@ import re
 import csv
 import sys
 
+
 def process_line(x):
     return ",".join(x.split()) #removes all spaces and replaces with single comma
 
@@ -36,13 +37,11 @@ def print_dict(data):
 
 def main():
     with open(str(sys.argv[1])) as file:
-        file_contents = file.read()
-        file_contents = list(map(process_line, file_contents.splitlines())) # process each line
+        file_contents = list(map(process_line, file.read().splitlines())) # process each line
         data = parse_filecontents(file_contents)
         with open('formatted_data.csv', 'w') as f:
             w = csv.writer(f)
             for key in data.keys():
-                #print([key] + data[key])
                 w.writerow([key] + data[key])
 
 main()
