@@ -29,14 +29,19 @@ class CodeParser:
                 data[course].append(code)
         return data
 
+    def createCSV(self, data):
+        with open(self.csv, 'w') as f:
+            w = csv.writer(f)
+            for key in data.keys():
+                w.writerow([key] + data[key])
+
     def parse(self, filename):
         with open(filename) as file:
             file_contents = map(lambda x : ",".join(x.split()), file.read().splitlines()) # process each line
             data = self.parse_filecontents(file_contents)
-            with open(self.csv, 'w') as f:
-                w = csv.writer(f)
-                for key in data.keys():
-                    w.writerow([key] + data[key])
+            print(".txt file has been parsed into an array")
+            self.createCSV(data)
+
 
 # x = CodeParser("codes.txt")
 # x.parse()
