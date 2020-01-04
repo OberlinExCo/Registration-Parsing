@@ -43,5 +43,5 @@ class CodeParser:
             self.createCSV(data)
 
 
-# x = CodeParser("codes.txt")
-# x.parse()
+x = CodeParser("codes.txt")
+x.parse()
