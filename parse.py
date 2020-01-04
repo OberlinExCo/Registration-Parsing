@@ -2,10 +2,7 @@ import re
 import csv
 
 class CodeParser:
-
-    def __init__(self,filename):
-        self.filename = filename
-        self.csv = "formatted_data.csv"
+    csv = "formatted_data.csv"
 
     rx_dict = {
         'Course': re.compile(r'^.*EXCO,(?P<course>\d{3}[A-Z]?),.*$'),
@@ -32,8 +29,8 @@ class CodeParser:
                 data[course].append(code)
         return data
 
-    def parse(self):
-        with open(self.filename) as file:
+    def parse(self, filename):
+        with open(filename) as file:
             file_contents = map(lambda x : ",".join(x.split()), file.read().splitlines()) # process each line
             data = self.parse_filecontents(file_contents)
             with open(self.csv, 'w') as f:
