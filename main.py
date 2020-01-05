@@ -7,9 +7,11 @@ from drive import GoogleDrive
 from sheets import GoogleSheets
 from script import GoogleScripts
 
-SCOPES = ['https://www.googleapis.com/auth/script.projects',
-          'https://www.googleapis.com/auth/spreadsheets',
-          'https://www.googleapis.com/auth/drive']
+SCOPES = ['https://www.googleapis.com/auth/cloud-platform',
+'https://www.googleapis.com/auth/script.projects',
+'https://www.googleapis.com/auth/script.deployments',
+'https://www.googleapis.com/auth/spreadsheets',
+'https://www.googleapis.com/auth/drive']
 
 def main():
 
@@ -21,6 +23,15 @@ def main():
     if not creds or creds.invalid:
         flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
         creds = tools.run_flow(flow, store)
+
+    scripts = GoogleScripts(creds)
+    print(scripts.runMain("M6jN59wI6iRfX8V7CqwI1OF6JaInSVJzV"))
+    # create form for auth requests (write script to do this probably)
+    # add google script code
+    #   (link to appropriate documents: list of codes, password document)
+    #   (set up trigger)
+
+    return # temporary
 
     # Request name of file for unparsed codes
     print("\nEnter the file name for unparsed codes:")
