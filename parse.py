@@ -39,9 +39,5 @@ class CodeParser:
         with open(filename) as file:
             file_contents = map(lambda x : ",".join(x.split()), file.read().splitlines()) # process each line
             data = self.parse_filecontents(file_contents)
-            print(".txt file has been parsed into an array")
+            print("txt file has been parsed into an array")
             self.createCSV(data)
-
-
-x = CodeParser("codes.txt")
-x.parse()

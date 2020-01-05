@@ -1,18 +1,11 @@
 from googleapiclient import discovery
 from httplib2 import Http
-from oauth2client import file, client, tools
-from apiclient.http import MediaFileUpload
 
 class GoogleSheets:
     SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
 
-    def __init__(self):
-        store = file.Storage('storage.json')
-        creds = store.get()
-        if not creds or creds.invalid:
-            flow = client.flow_from_clientsecrets('credentials.json', self.SCOPES)
-            creds = tools.run_flow(flow, store)
-        self.sheets_service = discovery.build('sheets', 'v4', http=creds.authorize(Http()))
+    def __init__(self, creds):
+        self.sheets_service = discovery.build('sheets', 'v4', credentials=creds)
         print("Google Sheets connection has been authenticated")
 
     def createSheet(self, title):
@@ -46,9 +39,4 @@ class GoogleSheets:
         }
         request = self.sheets_service.spreadsheets().batchUpdate(spreadsheetId=self.id, body=body)
         response = request.execute()
-
-
-
-x = GoogleSheets()
-x.createSheet("codes")
-x.push_csv_to_gsheet("formatted_data.csv")
+        return response.get("sheetId") # idk if this works, too lazy to test rn
