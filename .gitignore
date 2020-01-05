@@ -3,4 +3,4 @@ formatted_data.csv
 credentials.json
 storage.json
 .DS_Store
-__pycache__
+__pycache__/*
