@@ -3,7 +3,6 @@ import sys
 from oauth2client import file, client, tools
 
 from parse import Parser
-from drive import GoogleDrive
 from sheets import GoogleSheets
 from script import GoogleScripts
 
