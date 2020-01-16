@@ -47,7 +47,9 @@ def main():
     passwordsId = Parser().parseURL(passwordsURL)
 
     # parse list of courses into an array
+    courses = Parser().getKeys(outputFilename)
 
+    # execute google script
     GoogleScripts(creds).executeGoogleScript(courses,codesId,passwordsId)
 
     # runMain("M6jN59wI6iRfX8V7CqwI1OF6JaInSVJzV")

@@ -51,3 +51,13 @@ class Parser:
             return match.group('id')
         else:
             return ""
+
+    def getKeys(self, csvFilename):
+        retVal = []
+        with open(csvFilename, 'r') as csv_file:
+            for row in csv_file:
+                retVal.append(row.split(",")[0])
+        return retVal
+
+
+print(Parser().getKeys("formatted_data.csv"))
