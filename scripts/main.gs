@@ -1,4 +1,6 @@
-function addTrigger() { // idk if this is the way to do this
+// This function sets up a trigger on the spreadsheet so that whenever
+// the form is submitted, it calls the function 'emailCode' in 'trigger.gs'
+function addTrigger() {
   var sheetId = PropertiesService.getScriptProperties().getProperty('sheetId');
   var sheet = SpreadsheetApp.openById(sheetId);
   ScriptApp.newTrigger('emailCode')
@@ -7,15 +9,21 @@ function addTrigger() { // idk if this is the way to do this
     .create();
 };
 
-function main(courses,codesId,passwordsId) { // do we want to use URL for codes document?
+// This function is called by the python script via the Google Scripts API. It creates
+// the form for instructors to request codes as well as the associated response spreadsheet.
+function main(courses,codesId,passwordsId) {
   Logger.log(courses);
   Logger.log(codesId);
   var formId = createForm(courses);
   var sheetId = createSpreadsheet(formId);
+
+  // saving IDs for documents to script properties for use by other functions.
   PropertiesService.getScriptProperties().setProperty('sheetId', sheetId);
   PropertiesService.getScriptProperties().setProperty('codes', codesId);
   PropertiesService.getScriptProperties().setProperty('passwords', passwordsId);
 };
+
+// ----------------------------------------------------------------------------------
 
 var formTitle = "Authorization Code Request Form";
 var formDescription = "Use this form to sent registration authorization codes to your students";

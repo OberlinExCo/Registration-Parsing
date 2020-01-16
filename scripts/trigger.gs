@@ -1,14 +1,19 @@
+// This function is called whenever the form is submitted (presuming somebody called the 'addTrigger' function').
+// It receives an event object 'e' with all the form data inside & handles the data appropriately.
+// If you are having troubles with passwords, make sure the passwords are all cast as 'plain text'.
 function emailCode(e) {
   var values = e.values;
-  Logger.log(values)
   var requester = values[1];
   var course = values[2];
   var password = values[3];
   var email = values[4];
 
+  // getting IDs for codes & passwords documents from script properties
   var codesId =  PropertiesService.getScriptProperties().getProperty('codes');
   var passwordsId = PropertiesService.getScriptProperties().getProperty('passwords');
 
+  // Authenticating form request. This is crude, but it's something. If the password is incorrect, it sends an email
+  // to exco@oberlin.edu and the requester so that the rest can be handled by a person.
   if(!Auth(passwordsId,course,password)){
     var subject = 'ExCo Auth Code Request Failure: ' + course;
     var message = 'Codes for EXCO' + course + ' were requested by ' + requester + ' for the following emails: ' + email;
@@ -16,8 +21,8 @@ function emailCode(e) {
     throw new Error("Authentication for EXCO" + course + " has failed. Requester: " + requester + "; Emails: " + email);
   }
 
+  // If authentication is successful, unique codes are sent to each of the emails listed on the form
   var emailArray = email.split(',');
-
   for (var i = 0; i < emailArray.length; i++) {
     var code = getCode(codesId,course);
 
@@ -26,6 +31,8 @@ function emailCode(e) {
     MailApp.sendEmail(emailArray[i],subject,message);
   }
 };
+
+// -------------------------------------------------------
 
 function Auth(passwordsId,course,password) {
   var dataspreadsheet = SpreadsheetApp.openById(passwordsId);
