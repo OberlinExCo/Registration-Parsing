@@ -39,10 +39,10 @@ def main():
     # Generate Request Form & Responses Spreadsheet
     queryContinue("Would you like to generate code request form with this as the primary document?")
 
-    # request link for passcode document here
-    # print("Please paste the URL for the spreadsheet of passwords:")
-    # passwordsURL = input()
-    # passwordsId = Parser().parseURL(passwordsURL)
+    # TODO:request link for passcode document here
+    print("Please paste the URL for the spreadsheet of passwords:")
+    passwordsURL = input()
+    passwordsId = Parser().parseURL(passwordsURL)
 
     GoogleScripts(creds).runMain("M6jN59wI6iRfX8V7CqwI1OF6JaInSVJzV")
 

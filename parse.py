@@ -7,6 +7,7 @@ class Parser:
     rx_dict = {
         'Course': re.compile(r'^.*EXCO,(?P<course>\d{3}[A-Z]?),.*$'),
         'Code': re.compile(r'^\(unassigned\),(?P<code>\w{6}),.*$'),
+        'ID': re.compile(r'\/spreadsheets\/d\/(?P<id>[a-zA-Z0-9-_]+)')
     }
 
     def _parse_line(self,line):
@@ -43,3 +44,10 @@ class Parser:
             self.createCSV(data)
         print("File has been parsed to " + self.csv)
         return self.csv
+
+    def parseURL(self, URL):
+        key, match = self._parse_line(URL)
+        if key == 'ID':
+            return match.group('id')
+        else:
+            return ""
