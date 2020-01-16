@@ -40,4 +40,4 @@ class GoogleSheets:
         }
         request = self.sheets_service.spreadsheets().batchUpdate(spreadsheetId=self.id, body=body)
         response = request.execute()
-        return response.get("sheetId") # idk if this works, too lazy to test rn
+        return self.id
