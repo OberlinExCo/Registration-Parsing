@@ -6,6 +6,15 @@ class GoogleScripts:
         self.script_service = discovery.build('script', 'v1', credentials=creds)
         print("Google Script connection has been authenticated")
 
+    def executeGoogleScript(self,courses,codesId,passwordsId):
+        body = {
+            "function" : "main",
+            "parameters" : [courses, codesId, passwordsId]
+        }
+        request = self.script_service.scripts().run(scriptId=id,body=body)
+        response = request.execute()
+        return response['response']['result']
+
     def createProject(self,title,parentId):
         body = {
             'title' : title,

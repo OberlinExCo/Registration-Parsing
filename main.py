@@ -21,30 +21,38 @@ def main():
 
     outputFilename = Parser().parseAuthCodes(inputFilename)
 
+    # ------------------------------------------------------
 
-    # authorize Google API stuff
+    # Upload CSV file?
     queryContinue("Would you like to upload this CSV file to Google Drive?")
 
+    # authorize Google API stuff
     store = file.Storage('storage.json')
     creds = store.get()
     if not creds or creds.invalid:
         flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
         creds = tools.run_flow(flow, store) # creds variable is here!!
 
-
     # Uploads csv file into google sheets document in drive
     codesId = GoogleSheets(creds).createSheet("Authorization Codes").batchUpdateCSV(outputFilename)
 
+    # ------------------------------------------------------
 
-    # Generate Request Form & Responses Spreadsheet
+    # Generate Request Form & Responses Spreadsheet?
     queryContinue("Would you like to generate code request form with this as the primary document?")
 
-    # TODO:request link for passcode document here
+    # request link for passcode document here
     print("Please paste the URL for the spreadsheet of passwords:")
     passwordsURL = input()
     passwordsId = Parser().parseURL(passwordsURL)
 
-    GoogleScripts(creds).runMain("M6jN59wI6iRfX8V7CqwI1OF6JaInSVJzV")
+    # parse list of courses into an array
+
+    GoogleScripts(creds).executeGoogleScript(courses,codesId,passwordsId)
+
+    # runMain("M6jN59wI6iRfX8V7CqwI1OF6JaInSVJzV")
+
+    # open up browser to set up trigger
 
 
 
