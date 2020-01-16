@@ -58,6 +58,3 @@ class Parser:
             for row in csv_file:
                 retVal.append(row.split(",")[0])
         return retVal
-
-
-print(Parser().getKeys("formatted_data.csv"))
