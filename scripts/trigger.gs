@@ -1,31 +1,10 @@
-var formTitle = "Authorization Code Request Form";
-var formDescription = "Use this form to sent registration authorization codes to your students";
-
-function main(courses,codesId,passwordsId) { // do we want to use URL for codes document?
-  Logger.log(courses);
-  Logger.log(codesId);
-  var formId = createForm(courses);
-  var sheetId = createSpreadsheet(formId);
-  PropertiesService.getScriptProperties().setProperty('sheetId', sheetId);
-  PropertiesService.getScriptProperties().setProperty('codes', codesId);
-  PropertiesService.getScriptProperties().setProperty('passwords', passwordsId);
-};
-
-function addTrigger() { // idk if this is the way to do this
-  var sheetId = PropertiesService.getScriptProperties().getProperty('sheetId');
-  var sheet = SpreadsheetApp.openById(sheetId);
-  ScriptApp.newTrigger('emailCode')
-    .forSpreadsheet(sheet)
-    .onFormSubmit()
-    .create();
-};
-
 function emailCode(e) {
   var values = e.values;
-  var course = values[1];
-  var password = values[2];
-  var email = values[3];
-  var requester = values[4];
+  Logger.log(values)
+  var requester = values[1];
+  var course = values[2];
+  var password = values[3];
+  var email = values[4];
 
   var codesId =  PropertiesService.getScriptProperties().getProperty('codes');
   var passwordsId = PropertiesService.getScriptProperties().getProperty('passwords');
@@ -52,53 +31,12 @@ function Auth(passwordsId,course,password) {
   var dataspreadsheet = SpreadsheetApp.openById(passwordsId);
   var sheet = dataspreadsheet.getSheets()[0];
   var dict = sheet_to_dict(sheet);
+  Logger.log(course);
+  Logger.log(dict);
   var retVal = password === dict[course][0];
   Logger.log(retVal + " : " + password + " === " + dict[course][0]);
   return retVal;
 }
-
-function createForm(courses) {
-  var form = FormApp.create(formTitle)
-  .setDescription(formDescription)
-  .collectsEmail(true);
-  // form.requiresLogin(true); fix this!
-
-  // create list of course numbers
-  form.addListItem()
-  .setTitle('Course Numbers')
-  .setChoiceValues(courses)
-  .setRequired(true);
-
-  // add password box
-  form.addTextItem()
-  .setTitle('Enter Course Password')
-  .setRequired(true);
-
-  // preparing text validation
-  var emailValidation = FormApp.createTextValidation()
-  .requireTextMatchesPattern('^(\s?[^\s,]+@[^\s,]+\.[^\s,]+\s?,)*(\s?[^\s,]+@[^\s,]+\.[^\s,]+)$')
-  .setHelpText('Type emails separated by commas')
-  .build();
-
-  // add email box (w/ text validation)
-  form.addTextItem()
-  .setTitle('Student Email Addresses')
-  .setValidation(emailValidation)
-  .setRequired(true);
-
-  return form.getId();
-};
-
-function createSpreadsheet(formId) {
-  // Open a form by ID and create a new spreadsheet.
-  var form = FormApp.openById(formId);
-  var ss = SpreadsheetApp.create('Auth Code Requests Log');
-
-  // Update the form's response destination.
-  form.setDestination(FormApp.DestinationType.SPREADSHEET, ss.getId());
-
-  return ss.getId();
-};
 
 // returns the last code in the list & deletes it from the spreadsheet
 function getCode(codesId,course) {
