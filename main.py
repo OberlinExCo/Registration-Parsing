@@ -7,11 +7,12 @@ from drive import GoogleDrive
 from sheets import GoogleSheets
 from script import GoogleScripts
 
-SCOPES = ['https://www.googleapis.com/auth/cloud-platform',
-'https://www.googleapis.com/auth/script.projects',
-'https://www.googleapis.com/auth/script.deployments',
-'https://www.googleapis.com/auth/spreadsheets',
-'https://www.googleapis.com/auth/drive']
+SCOPES = ['https://www.googleapis.com/auth/script.projects',
+            'https://www.googleapis.com/auth/forms',
+            'https://www.googleapis.com/auth/script.scriptapp',
+            'https://www.googleapis.com/auth/script.send_mail',
+            ''
+            'https://www.googleapis.com/auth/spreadsheets']
 
 def main():
 
