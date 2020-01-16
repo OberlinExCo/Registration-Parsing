@@ -6,7 +6,7 @@ class GoogleSheets:
 
     def __init__(self, creds):
         self.sheets_service = discovery.build('sheets', 'v4', credentials=creds)
-        print("Google Sheets connection has been authenticated")
+        print("\nGoogle Sheets connection has been authenticated")
 
     def createSheet(self, title):
         spreadsheet = {

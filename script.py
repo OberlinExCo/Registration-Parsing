@@ -6,7 +6,7 @@ scriptId = "M6jN59wI6iRfX8V7CqwI1OF6JaInSVJzV"
 class GoogleScripts:
     def __init__(self,creds):
         self.script_service = discovery.build('script', 'v1', credentials=creds)
-        print("Google Script connection has been authenticated")
+        print("\nGoogle Script connection has been authenticated")
 
     def executeGoogleScript(self,courses,codesId,passwordsId):
         body = {

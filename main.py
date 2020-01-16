@@ -31,6 +31,7 @@ def main():
     if not creds or creds.invalid:
         flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
         creds = tools.run_flow(flow, store) # creds variable is here!!
+        print("Credentials have been generated")
 
     # Uploads csv file into google sheets document in drive
     codesId = GoogleSheets(creds).createSheet("Authorization Codes").batchUpdateCSV(outputFilename)
