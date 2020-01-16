@@ -7,9 +7,9 @@ from sheets import GoogleSheets
 from script import GoogleScripts
 
 SCOPES = ['https://www.googleapis.com/auth/script.projects',
-            'https://www.googleapis.com/auth/forms',
             'https://www.googleapis.com/auth/script.scriptapp',
-            'https://www.googleapis.com/auth/script.send_mail'
+            'https://www.googleapis.com/auth/script.send_mail',
+            'https://www.googleapis.com/auth/forms',
             'https://www.googleapis.com/auth/spreadsheets']
 
 def main():
@@ -50,7 +50,8 @@ def main():
     courses = Parser().getKeys(outputFilename)
 
     # execute google script
-    GoogleScripts(creds).executeGoogleScript(courses,codesId,passwordsId)
+    response = GoogleScripts(creds).executeGoogleScript(courses,codesId,passwordsId)
+    print(response)
 
     # TODO: open up browser to set up trigger
 

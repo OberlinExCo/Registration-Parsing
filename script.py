@@ -15,4 +15,4 @@ class GoogleScripts:
         }
         request = self.script_service.scripts().run(scriptId=scriptId,body=body)
         response = request.execute()
-        return response['response']['result']
+        return response
