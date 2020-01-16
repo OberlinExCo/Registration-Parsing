@@ -18,9 +18,10 @@ class GoogleSheets:
                                             fields='spreadsheetId').execute()
         self.id = spreadsheet.get('spreadsheetId')
         self.gid = spreadsheet.get('sheetId')
-        print("Spreadsheet has been created with id " + self.id)
+        print("Spreadsheet has been created with id " + self.id + "\n")
+        return self
 
-    def push_csv_to_gsheet(self,csv_path):
+    def batchUpdateCSV(self,csv_path):
         with open(csv_path, 'r') as csv_file:
             csvContents = csv_file.read()
         body = {

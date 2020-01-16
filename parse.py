@@ -41,4 +41,5 @@ class Parser:
             data = self.parse_filecontents(file_contents)
             print("txt file has been parsed into an array")
             self.createCSV(data)
-        print("File has been parsed to" + self.csv)
+        print("File has been parsed to " + self.csv)
+        return self.csv

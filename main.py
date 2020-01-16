@@ -2,7 +2,7 @@ import sys
 
 from oauth2client import file, client, tools
 
-from parse import CodeParser
+from parse import Parser
 from drive import GoogleDrive
 from sheets import GoogleSheets
 from script import GoogleScripts
@@ -17,61 +17,48 @@ def main():
 
     # Parse txt file from Registrar's Office into csv file
     print("\nEnter the file name for unparsed codes:")
-    filename = input()
+    inputFilename = input()
 
-    outputFilename = Parser().parseAuthCodes(filename)
+    outputFilename = Parser().parseAuthCodes(inputFilename)
 
 
     # authorize Google API stuff
-    queryContinue("Would you like to upload this CSV file to Google Drive? (y/n)")
+    queryContinue("Would you like to upload this CSV file to Google Drive?")
 
     store = file.Storage('storage.json')
     creds = store.get()
     if not creds or creds.invalid:
         flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
-        creds = tools.run_flow(flow, store)
+        creds = tools.run_flow(flow, store) # creds variable is here!!
 
 
     # Uploads csv file into google sheets document in drive
-    sheets = GoogleSheets(creds)
-    sheets.createSheet("auth codes")
-    codesId = sheets.push_csv_to_gsheet(outputFilename) # print out relevant information
+    codesId = GoogleSheets(creds).createSheet("Authorization Codes").batchUpdateCSV(outputFilename)
 
 
-    # Query user about further steps
-    queryContinue("Would you like to generate code request form with this as the primary document? (y/n)")
-
-    scripts = GoogleScripts(creds)
-    print(scripts.runMain("M6jN59wI6iRfX8V7CqwI1OF6JaInSVJzV"))
-    # create form for auth requests (write script to do this probably)
-    # add google script code
-    #   (link to appropriate documents: list of codes, password document)
-    #   (set up trigger)
-
-    # return # temporary
-
-
+    # Generate Request Form & Responses Spreadsheet
+    queryContinue("Would you like to generate code request form with this as the primary document?")
 
     # request link for passcode document here
+    # print("Please paste the URL for the spreadsheet of passwords:")
+    # passwordsURL = input()
+    # passwordsId = Parser().parseURL(passwordsURL)
 
-    scripts = GoogleScripts(creds)
-    # create form for auth requests (write script to do this probably)
-    # add google script code
-    #   (link to appropriate documents: list of codes, password document)
-    #   (set up trigger)
+    GoogleScripts(creds).runMain("M6jN59wI6iRfX8V7CqwI1OF6JaInSVJzV")
 
-    # organize documents into a folder that makes sense
-    drive = GoogleDrive(creds)
 
+
+# used to quit the program if "no", continue if "yes"
 def queryContinue(prompt):
     validInput = False
     while not validInput:
-        print("\n" + prompt)
+        print("\n" + prompt + " (y/n)")
         response = input()
 
         if response in ['y','Y','yes','Yes']:
             validInput = True
         if response in ['n','N','no','No']:
             sys.exit()
+    print("\n")
 
 main()
