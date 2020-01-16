@@ -48,6 +48,7 @@ class Parser:
     def parseURL(self, URL):
         key, match = self._parse_line(URL)
         if key == 'ID':
+            print("URL has been parsed to ID")
             return match.group('id')
         else:
             return ""
@@ -57,4 +58,5 @@ class Parser:
         with open(csvFilename, 'r') as csv_file:
             for row in csv_file:
                 retVal.append(row.split(",")[0])
+        print("List of courses retrieved from CSV document")
         return retVal
