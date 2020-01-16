@@ -15,14 +15,31 @@ SCOPES = ['https://www.googleapis.com/auth/cloud-platform',
 
 def main():
 
-    # set up argument for just parsing txt file & not uploading & all that
+    # Parse txt file from Registrar's Office into csv file
+    print("\nEnter the file name for unparsed codes:")
+    filename = input()
+
+    outputFilename = Parser().parseAuthCodes(filename)
+
 
     # authorize Google API stuff
+    queryContinue("Would you like to upload this CSV file to Google Drive? (y/n)")
+
     store = file.Storage('storage.json')
     creds = store.get()
     if not creds or creds.invalid:
         flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
         creds = tools.run_flow(flow, store)
+
+
+    # Uploads csv file into google sheets document in drive
+    sheets = GoogleSheets(creds)
+    sheets.createSheet("auth codes")
+    codesId = sheets.push_csv_to_gsheet(outputFilename) # print out relevant information
+
+
+    # Query user about further steps
+    queryContinue("Would you like to generate code request form with this as the primary document? (y/n)")
 
     scripts = GoogleScripts(creds)
     print(scripts.runMain("M6jN59wI6iRfX8V7CqwI1OF6JaInSVJzV"))
@@ -31,21 +48,9 @@ def main():
     #   (link to appropriate documents: list of codes, password document)
     #   (set up trigger)
 
-    return # temporary
+    # return # temporary
 
-    # Request name of file for unparsed codes
-    print("\nEnter the file name for unparsed codes:")
-    codes = input()
 
-    # Parse txt file from Registrar's Office into csv file
-    parser = CodeParser()
-    parser.parse(codes)
-    print("File has been parsed to" + parser.csv)
-
-    # Uploads csv file into google sheets document in drive
-    sheets = GoogleSheets(creds)
-    sheets.createSheet("auth codes")
-    codesId = sheets.push_csv_to_gsheet(parser.csv)
 
     # request link for passcode document here
 
@@ -57,5 +62,16 @@ def main():
 
     # organize documents into a folder that makes sense
     drive = GoogleDrive(creds)
+
+def queryContinue(prompt):
+    validInput = False
+    while not validInput:
+        print("\n" + prompt)
+        response = input()
+
+        if response in ['y','Y','yes','Yes']:
+            validInput = True
+        if response in ['n','N','no','No']:
+            sys.exit()
 
 main()

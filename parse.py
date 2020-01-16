@@ -1,7 +1,7 @@
 import re
 import csv
 
-class CodeParser:
+class Parser:
     csv = "formatted_data.csv"
 
     rx_dict = {
@@ -35,9 +35,10 @@ class CodeParser:
             for key in data.keys():
                 w.writerow([key] + data[key])
 
-    def parse(self, filename):
+    def parseAuthCodes(self, filename):
         with open(filename) as file:
             file_contents = map(lambda x : ",".join(x.split()), file.read().splitlines()) # process each line
             data = self.parse_filecontents(file_contents)
             print("txt file has been parsed into an array")
             self.createCSV(data)
+        print("File has been parsed to" + self.csv)
