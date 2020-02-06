@@ -5,7 +5,7 @@ class Parser:
     csv = "formatted_data.csv"
 
     rx_dict = {
-        'Course': re.compile(r'^.*EXCO,(?P<course>\d{3}[A-Z]?),.*$'),
+        'Course': re.compile(r'^.*EXCO,(?P<course>\d{3}?)(?P<coordinator>[A-Z]?),(?P<section>\d{2}).*$'),
         'Code': re.compile(r'^\(unassigned\),(?P<code>\w{6}),.*$'),
         'ID': re.compile(r'\/spreadsheets\/d\/(?P<id>[a-zA-Z0-9-_]+)')
     }
@@ -24,6 +24,9 @@ class Parser:
             key, match = self._parse_line(line)
             if key == 'Course':
                 course = match.group('course')
+                coordinator = match.group('coordinator')
+                section = match.group('section')
+                course = coordinator + course + "-" + section
                 data[course] = []
             if key == 'Code':
                 code = match.group('code')
